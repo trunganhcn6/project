@@ -1,0 +1,18 @@
+package com.me.project.web.payload.request;
+
+import com.me.project.entity.StoreAcc;
+import lombok.Data;
+
+import javax.validation.constraints.Email;
+import java.io.Serializable;
+
+/**
+ * A DTO for the {@link StoreAcc} entity
+ */
+@Data
+public class LoginStoreAccountDto implements Serializable {
+    private final String username;
+    @Email
+    private final String email;
+    private final String password;
+}
