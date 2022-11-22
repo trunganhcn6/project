@@ -32,5 +32,4 @@ public class BrandProduct {
     private StoreProduct storeProduct;
 
 
-
 }

@@ -10,7 +10,7 @@ import java.io.Serializable;
  * A DTO for the {@link StoreAcc} entity
  */
 @Data
-public class LoginStoreAccountDto implements Serializable {
+public class StoreAccDTO implements Serializable {
     private final String username;
     @Email
     private final String email;

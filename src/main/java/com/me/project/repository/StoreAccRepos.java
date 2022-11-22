@@ -8,5 +8,10 @@ import org.springframework.stereotype.Repository;
 public interface StoreAccRepos extends JpaRepository<StoreAcc,Integer> {
     StoreAcc findByUsername(String username);
 
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
+
+
 
 }

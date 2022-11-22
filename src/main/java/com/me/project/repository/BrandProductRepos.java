@@ -14,10 +14,7 @@ public interface BrandProductRepos extends JpaRepository<BrandProduct, Integer> 
 
     Optional<BrandProduct> findByBrand_IdAndProducts_Id(Integer id, Integer id1);
 
-   /* @Query("SELECT * ((FROM product p JOIN brand_product bp ON p.id = bp.product_id)"
-                                + " JOIN brand b ON b.id = bp.brand_id" +
-            "WHERE bp.id=?")
-    List<BrandProduct> findByProduct_id(Integer brandProductId);
 
-*/
+//    List<BrandProduct> findByProduct_id(Integer brandProductId);
+
 }

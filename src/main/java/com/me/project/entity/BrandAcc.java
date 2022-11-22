@@ -16,9 +16,11 @@ public class BrandAcc {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @Column(unique = true)
     @NotBlank
     private String username;
 
+    @Column(unique = true)
     @Email
     @NotBlank
     private String email;

@@ -1,23 +1,23 @@
 package com.me.project.controller;
 
-import com.me.project.entity.Store;
+import com.me.project.entity.BrandAcc;
 import com.me.project.entity.StoreAcc;
-import com.me.project.repository.BrandAccRepos;
-import com.me.project.repository.StoreAccRepos;
-import com.me.project.repository.StoreRepos;
+import com.me.project.repository.*;
 import com.me.project.service.BrandAccDetails;
 import com.me.project.service.StoreAccDetails;
 import com.me.project.web.jwt.JwtUtils;
-import com.me.project.web.payload.request.LoginBrandAccountDto;
-import com.me.project.web.payload.request.LoginStoreAccountDto;
+import com.me.project.web.payload.request.BrandAccDTO;
+import com.me.project.web.payload.request.StoreAccDTO;
 import com.me.project.web.payload.response.JwtResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,7 +26,7 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
+public class AccountController {
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -39,8 +39,14 @@ public class AuthController {
     @Autowired
     StoreRepos storeRepos;
 
- /*   @Autowired
-    PasswordEncoder encoder;*/
+    @Autowired
+    BrandRepos brandRepos;
+
+    @Autowired
+    StoreProductRepos storeProductRepos;
+
+    @Autowired
+    PasswordEncoder encoder;
 
     @Autowired
     JwtUtils jwtUtils;
@@ -50,10 +56,10 @@ public class AuthController {
     generate JWT
     get UserDetails from Authentication object
     response contains JWT and UserDetails data */
-    @PostMapping("/store/sign-in")
-    public ResponseEntity<?> authenticateStore(@Valid @RequestBody LoginStoreAccountDto loginStoreAccountDto) {
+    @PostMapping("/store-account/login")
+    public ResponseEntity<?> authenticateStore(@Valid @RequestBody StoreAccDTO storeAccDTO) {
         Authentication authentication = authenticationManager.authenticate
-                (new UsernamePasswordAuthenticationToken(loginStoreAccountDto.getUsername(), loginStoreAccountDto.getPassword()));
+                (new UsernamePasswordAuthenticationToken(storeAccDTO.getUsername(), storeAccDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateStoreJwt(authentication);
 
@@ -64,10 +70,10 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponse(jwt, storeAccDetails.getId(), storeAccDetails.getUsername(), storeAccDetails.getEmail(), role));
     }
 
-    @PostMapping("/brand/sign-in")
-    public ResponseEntity<?> authenticateBrand(@Valid @RequestBody LoginBrandAccountDto loginBrandAccountDto) {
+    @PostMapping("/brand-account/login")
+    public ResponseEntity<?> authenticateBrand(@Valid @RequestBody BrandAccDTO brandAccDTO) {
         Authentication authentication = authenticationManager.authenticate
-                (new UsernamePasswordAuthenticationToken(loginBrandAccountDto.getUsername(), loginBrandAccountDto.getPassword()));
+                (new UsernamePasswordAuthenticationToken(brandAccDTO.getUsername(), brandAccDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateStoreJwt(authentication);
 
@@ -79,7 +85,7 @@ public class AuthController {
     }
 
 /*    @PostMapping("brand/signup")
-    public ResponseEntity<?> registerBrand(@Valid @RequestBody LoginBrandAccountDto loginBrandAccountDto) {
+    public ResponseEntity<?> registerBrand(@Valid @RequestBody BrandAccDTO loginBrandAccountDto) {
         if (brandAccRepos.existsByUsername(loginBrandAccountDto.getUsername())) {
             return ResponseEntity
                     .badRequest()
@@ -96,22 +102,61 @@ public class AuthController {
         return null;
     }*/
 
-    @PostMapping("store/signup")
-    public ResponseEntity<?> registerStore(@RequestBody LoginStoreAccountDto loginStoreAccountDto) {
-        if (brandAccRepos.existsByUsername(loginStoreAccountDto.getUsername())) {
+    //Create StoreAcc
+    @PostMapping("store-account/new")
+    @PreAuthorize("hasRole('STORE')")
+    public ResponseEntity<?> registerStore(@RequestBody StoreAccDTO storeAccDTO) {
+        if (storeAccRepos.existsByUsername(storeAccDTO.getUsername())) {
             return ResponseEntity
                     .badRequest()
                     .body("Error: Username is already taken!");
         }
 
-        if (brandAccRepos.existsByEmail(loginStoreAccountDto.getEmail())) {
+        if (storeAccRepos.existsByEmail(storeAccDTO.getEmail())) {
             return ResponseEntity
                     .badRequest()
                     .body("Error: Email is already in use!");
         }
 
         StoreAcc storeAcc = new StoreAcc();
-        storeAcc.setStore(storeRepos.findById(1));
+        if(storeAccRepos.findById(1).isPresent()) {
+            storeAcc.setStore(storeRepos.findById(1).get());
+        } else ResponseEntity.badRequest().body("Error: No store is found!");
 
+        storeAcc.setRole("STORE");
+        storeAcc.setUsername(storeAccDTO.getUsername());
+        storeAcc.setPassword(encoder.encode(storeAccDTO.getPassword()));
+        storeAcc.setEmail(storeAccDTO.getEmail());
+        storeAccRepos.save(storeAcc);
+        return ResponseEntity.ok().body("Store Account registered!");
     }
+
+    //Create BrandAcc
+    @PostMapping("brand-account/new")
+    @PreAuthorize("hasRole('STORE')")
+    public ResponseEntity<?> registerBrand(@RequestBody BrandAccDTO brandAccDTO) {
+        if (brandAccRepos.existsByUsername(brandAccDTO.getUsername())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Error: Username is already taken!");
+        }
+
+        if (brandAccRepos.existsByEmail(brandAccDTO.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Error: Email is already in use!");
+        }
+
+        BrandAcc brandAcc = new BrandAcc();
+
+        brandAcc.setRole("BRAND");
+        brandAcc.setBrand(brandRepos.findById(brandAccDTO.getBrandId()).get());
+        brandAcc.setUsername(brandAccDTO.getUsername());
+        brandAcc.setPassword(encoder.encode(brandAccDTO.getPassword()));
+        brandAcc.setEmail(brandAccDTO.getEmail());
+        brandAccRepos.save(brandAcc);
+        return ResponseEntity.ok().body("Brand Account registered!");
+    }
+
+
 }

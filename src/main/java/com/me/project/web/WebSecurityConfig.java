@@ -19,7 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class WebSecurityConfig {
     @Autowired
     BrandAccDetailsService brandAccDetailsService;
@@ -30,8 +30,11 @@ public class WebSecurityConfig {
     @Autowired
     private AuthEntryPointJwt entryPointJwt;
 
+    @Autowired
+    private PasswordEncoder encoder;
+
     @Bean
-    public AuthTokenFilter authTokenFilter(){
+    public AuthTokenFilter authTokenFilter() {
         return new AuthTokenFilter();
     }
 
@@ -41,9 +44,9 @@ public class WebSecurityConfig {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
         authProvider.setUserDetailsService(storeAccDetailsService);
-        //If not set, the password will be compared using PasswordEncoderFactories.createDelegatingPasswordEncoder()
-        //authProvider.setPasswordEncoder(passwordEncoder());
 
+        //If not set, the password will be compared using PasswordEncoderFactories.createDelegatingPasswordEncoder()
+        authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
 
@@ -52,18 +55,25 @@ public class WebSecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-//    }
+    @Bean
+    public static PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    //
+    private final String[] doNotCheck = {"/auth/store-account/login", "/auth/store-account/new", "/auth/brand-account/login", "/auth/brand-account/new"};
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(entryPointJwt).and()
+        http.cors()
+                .and()
+                .csrf().disable()
+                .exceptionHandling().authenticationEntryPoint(entryPointJwt)
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/test/**").permitAll()
+                .authorizeRequests()
+                .antMatchers(doNotCheck).permitAll()
+//                .antMatchers("/store/storage").hasAnyRole("STORE")
                 .anyRequest().authenticated();
 
         http.authenticationProvider(authenticationProvider());

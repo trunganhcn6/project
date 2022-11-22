@@ -11,7 +11,7 @@ import java.io.Serializable;
  * A DTO for the {@link BrandAcc} entity
  */
 @Data
-public class LoginBrandAccountDto implements Serializable {
+public class BrandAccDTO implements Serializable {
 
     private final String username;
     @Email
@@ -19,4 +19,7 @@ public class LoginBrandAccountDto implements Serializable {
 
     @NotBlank
     private final String password;
+
+    @NotBlank
+    private final Integer brandId;
 }

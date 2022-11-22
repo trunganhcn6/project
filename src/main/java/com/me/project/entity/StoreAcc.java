@@ -13,9 +13,11 @@ public class StoreAcc {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @Column(unique = true)
     @NotBlank
     private String username;
 
+    @Column(unique = true)
     @NotBlank
     @Email
     private String email;
