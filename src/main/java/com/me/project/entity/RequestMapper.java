@@ -1,7 +1,7 @@
 package com.me.project.entity;
 
-import com.me.project.web.payload.request.RequestDto;
-import com.me.project.web.payload.request.StoreProductDTO;
+import com.me.project.dto.RequestDto;
+import com.me.project.dto.StoreProductDTO;
 import org.mapstruct.*;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")

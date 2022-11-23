@@ -4,8 +4,8 @@ import com.me.project.entity.Request;
 import com.me.project.entity.StoreProduct;
 import com.me.project.repository.RequestRepos;
 import com.me.project.repository.StoreProductRepos;
-import com.me.project.web.payload.request.RequestDto;
-import com.me.project.web.payload.request.StoreProductDTO;
+import com.me.project.dto.RequestDto;
+import com.me.project.dto.StoreProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -53,7 +53,7 @@ public class StoreService {
     /* REQUEST CRUD */
     //Get Request
     public Request getRequest(Integer requestId){
-        return requestRepos.getReferenceById(requestId);
+        return requestRepos.findById(requestId).orElseThrow();
     }
 
     //Get all request

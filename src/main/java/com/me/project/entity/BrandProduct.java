@@ -5,8 +5,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Entity
 @Getter @Setter
@@ -14,6 +12,11 @@ public class BrandProduct {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Integer id;
+
+    @NotBlank
+    private String name;
+
+    private String description;
 
     @NotBlank
     private Integer pricePerUnit;
@@ -25,12 +28,16 @@ public class BrandProduct {
     @JoinColumn(name = "brand_id")
     private Brand brand;
 
-    @OneToMany(mappedBy = "brandProduct", orphanRemoval = true)
-    private Set<Product> products = new LinkedHashSet<>();
-
-
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "store_product", unique = true)
     private StoreProduct storeProduct;
+
+    @ManyToOne
+    @JoinColumn(name = "size_id")
+    private Size size;
+
+    @ManyToOne
+    @JoinColumn(name = "color_id")
+    private Color color;
 
 }

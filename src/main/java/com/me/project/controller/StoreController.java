@@ -8,9 +8,9 @@ import com.me.project.repository.StoreProductRepos;
 import com.me.project.repository.StoreRepos;
 import com.me.project.service.RequestService;
 import com.me.project.service.StoreService;
-import com.me.project.web.payload.request.BrandDTO;
-import com.me.project.web.payload.request.RequestDto;
-import com.me.project.web.payload.request.StoreProductDTO;
+import com.me.project.dto.BrandDTO;
+import com.me.project.dto.RequestDto;
+import com.me.project.dto.StoreProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -128,7 +128,13 @@ public class StoreController {
     //Get all Brand
     @GetMapping("/brand")
     public List<Brand> getAllBrand(){
-        return brandRepos.findAll();
+        return null;
+    }
+
+    //Get 1 Brand
+    @GetMapping("/brand/{brandId}")
+    public Brand getBrand(@PathVariable Integer brandId){
+        return brandRepos.findById(brandId).orElseThrow();
     }
 
 

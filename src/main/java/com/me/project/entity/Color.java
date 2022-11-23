@@ -5,8 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Getter @Setter
@@ -18,5 +18,6 @@ public class Color {
     private String name;
 
     @OneToMany(mappedBy = "color", orphanRemoval = true)
-    private List<Product> products = new ArrayList<>();
+    private Set<BrandProduct> brandProducts = new LinkedHashSet<>();
+
 }

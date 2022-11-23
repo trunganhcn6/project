@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BrandProductService {
@@ -32,8 +31,8 @@ public class BrandProductService {
     }
 
     //Get 1 Product from 1 Brand
-    public Optional<BrandProduct> getABrandProduct(Integer brandId, Integer productId){
-        return brandProductRepos.findByBrand_IdAndProducts_Id(brandId, productId);
+    public BrandProduct getABrandProduct(Integer brandId, Integer productId){
+        return brandProductRepos.findById(productId).orElseThrow();
     }
 
     //

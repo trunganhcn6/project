@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  mysqldb:
+    image: mysql:5.7
+    ports:
+      - "3307:3306"
+    volumes:
+      - ~/apps/trunganh-project:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=trunganh@123
+      - MYSQL_PASSWORD=trunganh@123
+      - MYSQL_USER=trunganh
+      - MYSQL_DATABASE=new
+volumes:
+  db:

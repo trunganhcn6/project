@@ -1,4 +1,4 @@
-package com.me.project.web.payload.request;
+package com.me.project.dto;
 
 import com.me.project.entity.StoreAcc;
 import lombok.Data;
