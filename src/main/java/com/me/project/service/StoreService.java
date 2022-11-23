@@ -43,6 +43,11 @@ public class StoreService {
         } else return false;
     }
 
+    //Create Store Product = select from Brand Product
+    public boolean createStoreProduct(StoreProductDTO storeProductDTO) {
+        return false;
+    }
+
     /********************************/
 
     /* REQUEST CRUD */

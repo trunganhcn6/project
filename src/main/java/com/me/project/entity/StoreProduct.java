@@ -27,14 +27,14 @@ public class StoreProduct {
     @NotBlank
     private Integer price;
 
-    @OneToOne(mappedBy = "storeProduct", orphanRemoval = true)
-    private BrandProduct brandProduct;
-
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
 
     @OneToMany(mappedBy = "storeProduct", orphanRemoval = true)
     private Set<RequestDetails> requestDetails = new LinkedHashSet<>();
+
+    @OneToOne(mappedBy = "storeProduct", orphanRemoval = true)
+    private BrandProduct brandProduct;
 
 }

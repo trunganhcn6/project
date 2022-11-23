@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1669106957411-1" author="Admin (generated)">
+        <createTable tableName="brand">
+            <column name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_brand"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="address" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1669106957411-2" author="Admin (generated)">
+        <createTable tableName="brand_acc">
+            <column name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_brandacc"/>
+            </column>
+            <column name="username" type="VARCHAR(255)"/>
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="password" type="VARCHAR(255)"/>
+            <column name="brand_id" type="INT"/>
+            <column name="role" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1669106957411-3" author="Admin (generated)">
+        <createTable tableName="brand_product">
+            <column name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_brandproduct"/>
+            </column>
+            <column name="price_per_unit" type="INT"/>
+            <column name="time_to_produce" type="INT"/>
+            <column name="brand_id" type="INT"/>
+            <column name="store_product" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1669106957411-4" author="Admin (generated)">
+        <createTable tableName="color">
+            <column name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_color"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1669106957411-5" author="Admin (generated)">
+        <createTable tableName="customer">
+            <column name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_customer"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="address" type="VARCHAR(255)"/>
+            <column name="gender" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1669106957411-6" author="Admin (generated)">
+        <createTable tableName="product">
+            <column name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_product"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="color_id" type="INT"/>
+            <column name="size_id" type="INT"/>
+            <column name="brand_product_id" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1669106957411-7" author="Admin (generated)">
+        <createTable tableName="request">
+            <column name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_request"/>
+            </column>
+            <column name="request_date" type="DATETIME"/>
+            <column name="expected_delivery" type="DATETIME"/>
+            <column name="real_delivery" type="DATETIME"/>
+            <column name="status_id" type="INT"/>
+            <column name="store_id" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1669106957411-8" author="Admin (generated)">
+        <createTable tableName="request_details">
+            <column name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_request_details"/>
+            </column>
+            <column name="quantity" type="INT"/>
+            <column name="store_product_id" type="INT"/>
+            <column name="request_id" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1669106957411-9" author="Admin (generated)">
+        <createTable tableName="size">
+            <column name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_size"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1669106957411-10" author="Admin (generated)">
+        <createTable tableName="status">
+            <column name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_status"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1669106957411-11" author="Admin (generated)">
+        <createTable tableName="store">
+            <column name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_store"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="address" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1669106957411-12" author="Admin (generated)">
+        <createTable tableName="store_acc">
+            <column name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_storeacc"/>
+            </column>
+            <column name="username" type="VARCHAR(255)"/>
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="password" type="VARCHAR(255)"/>
+            <column name="store_id" type="INT"/>
+            <column name="role" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1669106957411-13" author="Admin (generated)">
+        <createTable tableName="store_product">
+            <column name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_storeproduct"/>
+            </column>
+            <column name="quantity" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="price" type="INT"/>
+            <column name="store_id" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1669106957411-14" author="Admin (generated)">
+        <addUniqueConstraint columnNames="email" constraintName="uc_brandacc_email" tableName="brand_acc"/>
+    </changeSet>
+    <changeSet id="1669106957411-15" author="Admin (generated)">
+        <addUniqueConstraint columnNames="username" constraintName="uc_brandacc_username" tableName="brand_acc"/>
+    </changeSet>
+    <changeSet id="1669106957411-16" author="Admin (generated)">
+        <addUniqueConstraint columnNames="store_product" constraintName="uc_brandproduct_store_product"
+                             tableName="brand_product"/>
+    </changeSet>
+    <changeSet id="1669106957411-17" author="Admin (generated)">
+        <addUniqueConstraint columnNames="email" constraintName="uc_storeacc_email" tableName="store_acc"/>
+    </changeSet>
+    <changeSet id="1669106957411-18" author="Admin (generated)">
+        <addUniqueConstraint columnNames="username" constraintName="uc_storeacc_username" tableName="store_acc"/>
+    </changeSet>
+    <changeSet id="1669106957411-19" author="Admin (generated)">
+        <addForeignKeyConstraint baseColumnNames="brand_id" baseTableName="brand_acc"
+                                 constraintName="FK_BRANDACC_ON_BRAND" referencedColumnNames="id"
+                                 referencedTableName="brand"/>
+    </changeSet>
+    <changeSet id="1669106957411-20" author="Admin (generated)">
+        <addForeignKeyConstraint baseColumnNames="brand_id" baseTableName="brand_product"
+                                 constraintName="FK_BRANDPRODUCT_ON_BRAND" referencedColumnNames="id"
+                                 referencedTableName="brand"/>
+    </changeSet>
+    <changeSet id="1669106957411-21" author="Admin (generated)">
+        <addForeignKeyConstraint baseColumnNames="store_product" baseTableName="brand_product"
+                                 constraintName="FK_BRANDPRODUCT_ON_STORE_PRODUCT" referencedColumnNames="id"
+                                 referencedTableName="store_product"/>
+    </changeSet>
+    <changeSet id="1669106957411-22" author="Admin (generated)">
+        <addForeignKeyConstraint baseColumnNames="brand_product_id" baseTableName="product"
+                                 constraintName="FK_PRODUCT_ON_BRAND_PRODUCT" referencedColumnNames="id"
+                                 referencedTableName="brand_product"/>
+    </changeSet>
+    <changeSet id="1669106957411-23" author="Admin (generated)">
+        <addForeignKeyConstraint baseColumnNames="color_id" baseTableName="product" constraintName="FK_PRODUCT_ON_COLOR"
+                                 referencedColumnNames="id" referencedTableName="color"/>
+    </changeSet>
+    <changeSet id="1669106957411-24" author="Admin (generated)">
+        <addForeignKeyConstraint baseColumnNames="size_id" baseTableName="product" constraintName="FK_PRODUCT_ON_SIZE"
+                                 referencedColumnNames="id" referencedTableName="size"/>
+    </changeSet>
+    <changeSet id="1669106957411-25" author="Admin (generated)">
+        <addForeignKeyConstraint baseColumnNames="request_id" baseTableName="request_details"
+                                 constraintName="FK_REQUEST_DETAILS_ON_REQUEST" referencedColumnNames="id"
+                                 referencedTableName="request"/>
+    </changeSet>
+    <changeSet id="1669106957411-26" author="Admin (generated)">
+        <addForeignKeyConstraint baseColumnNames="store_product_id" baseTableName="request_details"
+                                 constraintName="FK_REQUEST_DETAILS_ON_STORE_PRODUCT" referencedColumnNames="id"
+                                 referencedTableName="store_product"/>
+    </changeSet>
+    <changeSet id="1669106957411-27" author="Admin (generated)">
+        <addForeignKeyConstraint baseColumnNames="status_id" baseTableName="request"
+                                 constraintName="FK_REQUEST_ON_STATUS" referencedColumnNames="id"
+                                 referencedTableName="status"/>
+    </changeSet>
+    <changeSet id="1669106957411-28" author="Admin (generated)">
+        <addForeignKeyConstraint baseColumnNames="store_id" baseTableName="request" constraintName="FK_REQUEST_ON_STORE"
+                                 referencedColumnNames="id" referencedTableName="store"/>
+    </changeSet>
+    <changeSet id="1669106957411-29" author="Admin (generated)">
+        <addForeignKeyConstraint baseColumnNames="store_id" baseTableName="store_acc"
+                                 constraintName="FK_STOREACC_ON_STORE" referencedColumnNames="id"
+                                 referencedTableName="store"/>
+    </changeSet>
+    <changeSet id="1669106957411-30" author="Admin (generated)">
+        <addForeignKeyConstraint baseColumnNames="store_id" baseTableName="store_product"
+                                 constraintName="FK_STOREPRODUCT_ON_STORE" referencedColumnNames="id"
+                                 referencedTableName="store"/>
+    </changeSet>
+</databaseChangeLog>

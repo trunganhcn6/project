@@ -12,6 +12,7 @@ import java.util.Set;
 @Getter @Setter
 public class BrandProduct {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false)
     private Integer id;
 
     @NotBlank
@@ -27,9 +28,9 @@ public class BrandProduct {
     @OneToMany(mappedBy = "brandProduct", orphanRemoval = true)
     private Set<Product> products = new LinkedHashSet<>();
 
-    @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "store_product_id")
-    private StoreProduct storeProduct;
 
+    @OneToOne(orphanRemoval = true)
+    @JoinColumn(name = "store_product", unique = true)
+    private StoreProduct storeProduct;
 
 }

@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/store")
 @PreAuthorize("hasRole('STORE')")
 public class StoreController {
@@ -52,13 +52,29 @@ public class StoreController {
     }
 
     //Modify Store Product
-    @PutMapping("/product/{productId}")
+    @PutMapping("/product/{productId}/update")
     public ResponseEntity<?> modifyStoreProduct(@PathVariable Integer productId, StoreProductDTO newProduct) {
         if (storeService.modifyStoreProduct(productId, newProduct))
             return ResponseEntity.ok().body("Store Product has been updated");
         else return ResponseEntity.badRequest().body("Update failed!");
     }
 
+    //Create Store Product = add new Store Product from Brand Product
+    @PostMapping("/product/new")
+    public ResponseEntity<?> createStoreProduct(StoreProductDTO storeProductDTO){
+        if (storeService.createStoreProduct(storeProductDTO))
+            return ResponseEntity.ok("New product: " + storeProductDTO.getName() + " has been added");
+        return ResponseEntity.badRequest().body("Failed to add");
+    }
+
+    //
+
+
+    /*public ResponseEntity<?> createStoreProduct(@PathVariable StoreProduct storeProduct){
+        if(storeService.createStoreProduct(storeProduct))
+            return ResponseEntity.ok(storeProduct.getQuantity() + " " + storeProduct.getName() + " has been added");
+        else return ResponseEntity.badRequest().body("Failed to add new Store Product");
+    }*/
 
     /********************************/
 
@@ -90,14 +106,13 @@ public class StoreController {
     }
 
     //Delete Request
-    @DeleteMapping("/request/{requestId}")
+//    @DeleteMapping("/request/{requestId}")
 
 
     /********************************/
 
     //Create Brand
     @PostMapping("/brand/new")
-    @PreAuthorize("hasRole('STORE')")
     public ResponseEntity<?> createBrand(@RequestBody BrandDTO brandDTO) {
         if (brandRepos.existsByName(brandDTO.getName())) {
             return ResponseEntity.badRequest().body("Error: Brand name is not available");
@@ -108,6 +123,12 @@ public class StoreController {
         brand.setName(brandDTO.getName());
         brandRepos.save(brand);
         return ResponseEntity.ok().body("Create new Brand :" + brandDTO.getName());
+    }
+
+    //Get all Brand
+    @GetMapping("/brand")
+    public List<Brand> getAllBrand(){
+        return brandRepos.findAll();
     }
 
 
